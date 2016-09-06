@@ -7,7 +7,6 @@ from forms import IconFormField
 class IconField(models.Field):
 
     description = _('A fontawesome icon field')
-    __metaclass__ = models.SubfieldBase
 
     def __init__(self, *args, **kwargs):
         kwargs['max_length'] = 60
@@ -25,6 +24,11 @@ class IconField(models.Field):
             return value
 
         # default => string
+        return Icon(id=value)
+        
+    def from_db_value(self, value, expression, connection, context):
+        if value is None:
+            return value
         return Icon(id=value)
 
     def get_prep_value(self, value):
